@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Image search engine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+
+<body >
+<nav class="navbar  navbar-dark bg-dark justify-content-center">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1"> Image search engine by content</span>
+  </div>
+</nav>
+
+<br><br>
+
+<div style="text-align: center;" >
+<img src="static\assets\logo.png"
+     width="400"
+     height="130" />
+    </div>
+
+<div class="card">
+  <div class="card-body">
+<form method="POST" enctype="multipart/form-data" >
+
+    <div class="input-group mb-3" style="text-align:center;">
+        <span class="input-group-text">Choose number of photos to display</span>
+        <input type="text" aria-label="First name" class="form-control"  name="nbrpic" placeholder="number of photos ">
+        <input type="file" class="form-control"  name="query_img">
+        <input class="btn btn-primary" type="submit" value="Submit" style = "font-size:17px" >
+</div>
+
+</form>
+</div></div>
+
+
+{% if uploaded_image %}
+                <div style="text-align:center;">
+                <div >
+                    <p style="font-size:30px;"> <b>Given Image: </b> </p>
+                </div>
+                <div >
+                        <img src="{{ url_for('send_uploaded_file', filename=uploaded_image) }}"  />
+                </div>
+                </div>
+{% endif %}
+
+{% if answers %}
+ <div style="text-align:center;">
+        <hr>
+                <div>
+                    <p style="font-size:30px;"> <b>Results:</b> </p>
+                </div>
+                    {% for id  in answers %}
+
+                         <img id="img" src="static\photos\{{ id }}" />
+                   
+
+                    {% endfor %}s
+ <div/>
+{% endif %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+</html>
