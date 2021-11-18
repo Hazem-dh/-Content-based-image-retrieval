@@ -6,7 +6,10 @@ from utilis import PretrainedModel
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/cbir_database"
-app.config['UPLOAD_FOLDER'] = "static/uploads"
+dir = "static/uploads"
+if not os.path.isdir(dir):
+    os.mkdir(dir)
+app.config['UPLOAD_FOLDER'] = dir
 db = PyMongo(app).db
 model = PretrainedModel(database=db)
 
