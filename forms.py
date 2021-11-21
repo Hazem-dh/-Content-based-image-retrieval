@@ -5,6 +5,6 @@ from flask_wtf.file import FileField, FileRequired,FileAllowed
 
 
 class MyForm(FlaskForm):
-    number = IntegerField('number_pics', validators=[DataRequired()])
+    number = IntegerField('number_pics', validators=[DataRequired()], render_kw={"placeholder": "insert number of photos"})
     photo = FileField('image', validators=[FileRequired(),FileAllowed(['jpg', 'png'])])
     submit = SubmitField("Submit")
