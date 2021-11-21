@@ -16,7 +16,7 @@ An image search engine built with flask , MongoDB and tensorflow that uses machi
    ```
 4. Run the app by executing the following command
    ```sh
-   python app.py 
+   python App.py
    ```
 ## DEMO
 
