@@ -1,10 +1,15 @@
 import os
-from flask import Flask,request, render_template
+from flask import Flask, render_template
 from flask_pymongo import PyMongo
 from flask import send_from_directory
 from utilis import PretrainedModel
+from forms import MyForm
+from werkzeug.utils import secure_filename
+import uuid
+
 
 app = Flask(__name__)
+app.secret_key = uuid.uuid4().hex
 app.config["MONGO_URI"] = "mongodb://localhost:27017/cbir_database"
 dir = "static/uploads"
 if not os.path.isdir(dir):
@@ -16,15 +21,16 @@ model = PretrainedModel(database=db)
 
 @app.route('/', methods=['GET', 'POST'])
 def testing():
-    if request.method == 'POST':
-        file = request.files['query_img']
-        nb_pic = request.form['nbrpic']
-        save_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(save_path)
-        files = model.get_images(save_path,int(nb_pic))
-        return render_template("Webapp.html", uploaded_image=file.filename, answers=files)
+    form = MyForm()
+    if form.validate_on_submit():
+        f = form.photo.data
+        filename = secure_filename(f.filename)
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        f.save(save_path)
+        files = model.get_images(save_path, int(form.number.data))
+        return render_template("Webapp.html", form=form, uploaded_image=filename, answers=files)
     else:
-        return render_template('Webapp.html')
+        return render_template('Webapp.html', form=form)
 
 
 @app.route('/uploads/<filename>')

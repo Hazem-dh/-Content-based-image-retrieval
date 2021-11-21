@@ -39,5 +39,5 @@ class PretrainedModel:
                                                        np.array(image["features"])) for image in images}
         sorted_files = {k: v for k, v in sorted(files.items(), key=lambda item: item[1])}  # sorting dict by value
         keys=list(sorted_files.keys())
-        output = [keys[i] for i in range(nsi)]
+        output = [keys[i] for i in range(min(nsi, len(keys)))]
         return output
