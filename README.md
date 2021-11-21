@@ -12,7 +12,7 @@ An image search engine built with flask , MongoDB and tensorflow that uses machi
    ```
 3. Run the following command to fill the database with the necessary metadata to optimize search time 
    ```sh
-   python offline.py 
+   python Offline.py
    ```
 4. Run the app by executing the following command
    ```sh
