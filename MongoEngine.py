@@ -1,5 +1,8 @@
 from pymongo import MongoClient
+import logging
 import sys
+
+logging.basicConfig(format='%(levelname)s-%(asctime)s : %(message)s', level=logging.INFO)
 
 
 class MongoConnector:
@@ -11,10 +14,7 @@ class MongoConnector:
         try:
             client = MongoClient(self.server)
         except Exception:
-            print("############################################")
-            print("Oops! DATABASE IN NOT OPEN")
-            print("PLEASE LAUNCH MONGODB AND RETRY   ")
-            print("###########################################")
+            logging.error("DATABASE IN NOT OPEN , PLEASE LAUNCH MONGODB AND RETRY")
             sys.exit(1)
         self.database = client[self.database_name]
 
@@ -26,9 +26,9 @@ class MongoConnector:
     @staticmethod
     def insert_doc(collection, post):
         collection.insert_one(post)
-        print("data successfully inserted")
+        logging.info("Data successfully inserted")
 
     @staticmethod
     def insert_docs(collection, post):
         collection.insert_many(post)
-        print("data successfully inserted")
+        logging.info("Data successfully inserted")

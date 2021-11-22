@@ -1,9 +1,12 @@
-from utilis import PretrainedModel
 from mlinsights.mlmodel import KMeansL1L2
 from MongoEngine import MongoConnector
+from utilis import PretrainedModel
 from tqdm import tqdm
 import numpy as np
+import logging
 import os
+
+logging.basicConfig(format='%(levelname)s-%(asctime)s : %(message)s', level=logging.INFO)
 
 
 def extract_clusters(source_dir, model):
@@ -14,24 +17,23 @@ def extract_clusters(source_dir, model):
     kml1.fit(features)
     centers = kml1.cluster_centers_
     predictions = kml1.predict(features)
-    return centers, predictions, features ,files
+    return centers, predictions, features, files
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     model = PretrainedModel()
     dirs = "static/photos"
-    centers, predictions, features,files = extract_clusters(dirs,model)
+    centers, predictions, features, files = extract_clusters(dirs, model)
     db_connector = MongoConnector("localhost", "cbir_database")
-    print("filling database")
+    logging.info('Filling database')
     doc = {str(cluster_index): coord.tolist() for cluster_index, coord in enumerate(centers)}
     clusters = db_connector.get_collection("clusters")
     db_connector.insert_doc(clusters, doc)
     images = db_connector.get_collection("images")
     metadata = [
-            {
-                "cluster": int(predictions[i]),
-                "features": features[i, :].tolist(),
-                "file_name": files[i]
-            } for i in tqdm(range(0, features.shape[0]))]
+        {"cluster": int(predictions[i]),
+         "features": features[i, :].tolist(),
+         "file_name": files[i]} for i in tqdm(range(0, features.shape[0]))]
 
     db_connector.insert_docs(images, metadata)
-    print("database filled successfully")
+    logging.info('Database filled successfully')
